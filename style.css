@@ -1,0 +1,228 @@
+/* General page */
+.wrap {
+    display: flex;
+    justify-content: center;
+}
+.wrap-game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.wrap-rules {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 25px;
+}
+.zone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.zone-game {
+    width: 512px;
+    height: 512px;
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 5px;
+}
+.game-pause {
+    position: absolute;
+    width: 512px;
+    height: 512px;
+    right: 44.1%;
+}
+.zone-result {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: 633px;
+    border: 1px solid #000;
+    padding: 10px;
+    background: #f1f1f1;
+}
+.start {
+    margin-right: 25px;
+}
+.save-result {
+    margin-bottom: 15px;
+}
+.clean-storage {
+    background: #c25d5d;
+    border: none;
+}
+.start,
+.new-game,
+.new-game-result,
+.save-result,
+.clean-storage {
+    width: 110px;
+}
+.close {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    position: absolute;
+    left: 90%;
+    top: 2%;
+}
+.controls-show {
+    display: flex;
+}
+.text-bold {
+    font-weight: bold;;
+}
+.display-points,
+.display-level {
+    width: 100px;
+    height: 28px;
+    border: 1px solid #000;
+    margin-right: 100px;
+}
+.time-left {
+    width: 100px;
+    height: 28px;
+    border: 1px solid #000;
+}
+.controls {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    flex-direction: column;
+    align-items: center;
+}
+.cube {
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    border: 1px solid #fff;
+    border-radius: 10%;
+}
+.hide {
+    z-index: -1;
+}
+.result-users {
+    overflow: auto;
+    width: 278px;
+    height: 550px;
+}
+.result,
+.next-level {
+    position: absolute;
+    display: none;
+    width: 350px;
+    height: 250px;
+    background-color:#afadad;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    left: 41%;
+    flex-direction: column;
+    z-index: 2;
+    border: 1px solid #000;
+}
+.info {
+    position: absolute;
+    display: none;
+    width: 125px;
+    height: 50px;
+    background-color: #d0d0d0;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    left: 37%;
+    border: 1px solid #000;
+}
+.btn {
+    border-radius: 20px;
+}
+.controls-buttons {
+    align-items: center;
+    display: flex;
+    margin: 15px 0;
+}
+.user-name {
+    margin: 15px 0;
+}
+.your-score,
+.name,
+.name-table,
+.game-level,
+.level-end {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+.red{
+    background:#ff7a7a;
+}
+.blue {
+    background: #5f90ff;
+}
+.black {
+    background: #555555;
+}
+.yellow {
+    background: #f5f562;
+}
+.green {
+    background: #83fb83;
+}
+.font-red {
+    color: #f10101;
+}
+.show-rules {
+    background: #95d828; 
+    color: #000000;
+    border: none;
+    margin: 20px 0;
+}
+.author {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 25px;
+}
+/* Rules game page */
+.rules-wrap {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    margin: 25px 0;
+}
+.red-font{
+    background:#ff7a7a;
+}
+.blue-font {
+    background: #5f90ff;
+}
+.black-font {
+    background: #555555;
+    color: #fff;
+}
+.yellow-font {
+    background: #f5f562;
+}
+.green-font {
+    background: #83fb83;
+}
+
+.red-font,
+.blue-font,
+.black-font,
+.yellow-font,
+.green-font {
+    width: 100px;
+    padding: 0 5px;
+}
+.back-game {
+    margin-top: 15px;
+}
+.rules p {
+    max-width: 800px;
+}

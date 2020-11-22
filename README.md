@@ -1,0 +1,3 @@
+Game "Cube"
+===========
+© Sergei Smoliak

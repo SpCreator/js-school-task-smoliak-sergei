@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cubes</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery-3.5.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <div class="wrap">
+        <!-- BLOCK CONTROLS -->
+        <div class="wrap-game">
+            <div class="controls">
+                <div class="controls-buttons">
+                    <button class="btn btn-primary start">Start</button>
+                    <button class="btn btn-primary new-game">New game</button>
+                </div>
+                <div class="controls-show">
+                    <div class="controls-level">
+                        <p class="text-bold">Level</p>
+                        <p class="display-level">
+                            <span class="level-now"></span>
+                        </p>
+                    </div>
+                    <div class="controls-points">
+                        <p class="text-bold">Points</p>
+                        <p class="display-points">
+                            <span class="points font-red"></span>
+                            <span class="total-target"></span>
+                        </p>
+                    </div>
+                    <div class="controls-time-left">
+                        <p class="text-bold">Time left</p>
+                        <p class="time-left"></p>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- BLOCK CONTROLS END -->
+            <div class="zone">
+                <!-- BLOCK GAME -->
+                <div class="info"></div>
+                <div class="result">
+                    <button class="btn btn-primary close">X</button>
+                    <div class="result-score">
+                        <p class="game-level">Level: <span class="level"></span></p>
+                        <p class="your-score">Your score: <span class="score"></span></p>
+                    </div>
+                    <label for="user-name"><spam class="name">Name </spam><input class="user-name" type="text"> </label>
+                    <button class="btn btn-primary save-result">Save</button>
+                    <button class="btn btn-primary new-game-result">New game</button>
+                </div>
+                <div class="next-level">
+                    <span class="game-level">Level: <span class="level"></span></span>
+                    <span class="your-score">Total: <span class="total"></span></span>
+                    <p class="press-continue">Next level press continue</p>
+                    <button class="btn btn-primary level-up">Continue</button>
+                </div>
+                <div class="zone-game">
+                    <p class="press-start">Press button "Start" to begin the game</p>
+                    <div class="container">
+                        <div class="row"></div>
+                    </div>
+                </div>
+                <div class="game-pause"></div>
+            </div>
+            <!-- BLOCK GAME END -->
+        </div>
+            <!-- BLOCK RESULTS -->
+            <div class="wrap-rules">
+                <a href="rules.html"><button class="btn btn-primary show-rules">Game rules</button></a>
+                <div class="zone-result">
+                    <p class="name-table">Results:</p>
+                    <div class="result-users"></div>
+                    <button class="btn btn-primary clean-storage">Clean up</button>
+                </div>
+            </div>
+            <!-- BLOCK RESULTS END -->
+    </div>
+    <div class="author">
+        <p>© Sergei Smoliak</p>
+    </div>
+</body>
+</html>
