@@ -8,5 +8,5 @@ console.log(task1("XXXIV"));
 console.log(task2(121));
 // console.log(task2("lol"));
 console.log(task3("{}{}{}"));
-console.log(task4(5));
-console.log(task5());
+console.log(task4());
+console.log(task5(5));
