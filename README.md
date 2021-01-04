@@ -1,12 +1,10 @@
 Game "Cube"
 
-При написании игры я использовал лишь две библиотеки: jQuery и Bootstrap
+INIT & START
+1. git clone https://github.com/SpCreator/js-school-task-smoliak-sergei.git ./ 
+2. git checkout node
+3. npm init
+4. npx nodemon
 
-Bootstrap мне помог с версткой и стилизацией отдельных компонентов.
-
-Вся игра написана на чистом JS без использования JQuery.
-Почему без JQuery? Я поставил себе цель улучшить знания в нативном JS.
-JQuery я активно использую последние два года на разных проектах, которые базируются на WordPress.
-
-===========
+================
 © Sergei Smoliak
