@@ -54,7 +54,7 @@
      * Start the game
      */
     function start() {
-        timeNow.textContent = timeLimit;
+        timeNow.textContent = timeLimit;    
         levelInfo.textContent = level;
         totalTarget.textContent = ` / ${target}`;
         startClean();
@@ -390,7 +390,7 @@
     /**
      * Saving results in the result table
      */
-    function saveResult() {
+    async function saveResult() {
         let userName    = document.querySelector('.user-name').value;
         let score       = parseInt(points.innerHTML);
         let userData    = prepareUserData(userName, score, level);
@@ -402,8 +402,9 @@
         level = 1;
 
         timeBack();
-        saveLocalStorage(userData);
-        renderResult(prepareSortResults(JSON.parse(window.localStorage.getItem('resultData'))));
+        await setDb(userData);
+        let prepareusersData = await getDb();
+        renderResult(prepareusersData);
     }
 
     /**
@@ -428,33 +429,48 @@
      * 
      * @param {*} userData 
      */
-    function saveLocalStorage(userData) {
-        let myStorage   = window.localStorage;
-        let resultData  = getLocalStorage();
+    async function setDb(userData) {
+        let resultData = await getDb();
 
-        resultData.allUsers.push(userData);
-        myStorage.setItem('resultData', JSON.stringify(resultData));
+        if (!resultData) { 
+            resultData = {allUsers: [userData]};
+        } else {
+            resultData.allUsers.push(userData);
+        }
+
+        resultData.action = "set";
+
+        fetch('http://localhost:3000/result', {
+            method: 'POST',
+            body: JSON.stringify(resultData),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
     }
 
     /**
      * Getting data with local storage
      */
-    function getLocalStorage() {
-        let myStorage = window.localStorage;
+    async function getDb() {
+        let data = {'action': "get"};
+        let result = '';
 
-        if (myStorage.resultData) {
-            return JSON.parse(myStorage.resultData);  
-        } else {
-            locaStorageTemplate();
-            return JSON.parse(myStorage.resultData);
+        const response = await fetch('http://localhost:3000/result', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        let userData = await response.json();
+
+        if (userData) {
+            result = userData;
         }
-    }
 
-    /**
-     * Helper for the first save
-     */
-    function locaStorageTemplate() {
-        localStorage.setItem('resultData', JSON.stringify({allUsers: []}));
+        return result;
     }
 
     /**
@@ -467,14 +483,16 @@
     /**
      * Render the table results
      */
-    function renderResult(usersData = null) {
-        let prepareusersData = JSON.parse(window.localStorage.getItem('resultData'));
+    async function renderResult(usersData = null) {
+        let prepareusersData = await getDb();
 
         if (usersData === null) {
-            usersData = prepareSortResults(prepareusersData);
-        } 
-        
-        usersData ? prepareRenderResults(usersData.allUsers) : zoneResult.innerHTML = '' 
+            usersData = prepareusersData;
+        }
+
+        prepareusersData 
+        ? prepareRenderResults(prepareusersData.allUsers.slice(0, 10)) 
+        : zoneResult.innerHTML = '' 
     }
 
     /**
@@ -493,43 +511,18 @@
     }
 
     /**
-     * Preparation to the sorting information
-     * 
-     * @param {*} prepareusersData 
+     * Cleaning up Local Storage
      */
-    function prepareSortResults(prepareusersData) {
-        let usersData = '';
-
-        if (prepareusersData) {
-            usersData = sortResults(prepareusersData);
-        } else {
-            usersData = prepareusersData;
-        }
-
-        return usersData;
-    }
-
-    /**
-     * Sorting information
-     * 
-     * @param {*} prepareusersData 
-     */
-    function sortResults(prepareusersData) {
-        prepareusersData.allUsers.sort(function (obj1, obj2) {
-            if (obj1.name > obj2.name) {
-
-            return -1;
+    async function cleanSorage() {
+        let data = {'action': "del"};
+        await fetch('http://localhost:3000/result', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+            'Content-Type': 'application/json'
             }
         });
 
-        return prepareusersData;
-    }
-
-    /**
-     * Cleaning up Local Storage
-     */
-    function cleanSorage() {
-        window.localStorage.clear();
         renderResult();
     }
 
@@ -545,7 +538,7 @@
      */
     function congratulation(){
         const audio = new Audio;
-        audio.src = "sound/congratulation.mp3";
+        audio.src = "static/sound/congratulation.mp3";
         audio.play();
     }
 
@@ -554,7 +547,7 @@
      */
     function gameOver(){
         const audio = new Audio;
-        audio.src = "sound/game-over.mp3";
+        audio.src = "static/sound/game-over.mp3";
         audio.play();
     }
 
