@@ -1,6 +1,5 @@
 // Добавлен обработчик ошибок при невыполнении требований задачи.
-
-module.exports = (input) => {
+(function() {
     let romanSimnple = {
         'M': 1000,
         'D': 500,
@@ -21,8 +20,8 @@ module.exports = (input) => {
     }
 
     // General function.
-    function conversationNum(inputData) {
-        if (!inputData) return;
+    conversionNum = inputData => {
+        if (!inputData || typeof inputData != "string") return errorText('inputData');
 
         if (1 <= inputData.length && inputData.length <= 15) {
             result = 0;
@@ -46,7 +45,7 @@ module.exports = (input) => {
     }
 
     // Heler for the conversationNum().
-    function prepareResult(inputData) {
+    prepareResult = inputData => {
         let iterNum = 0;
         let result = 0;
 
@@ -68,14 +67,16 @@ module.exports = (input) => {
     }
 
     // Error store.
-    function errorText(error) {
+    errorText = error => {
         let errors =  {
             bigInteger: 'Слишком большое число! Допустимый диапазон вводимого римского числа от 1 до 3999 включительно.',
-            bigString: 'Максимальное количество вводимых символов равно 15'
+            bigString: 'Максимальное количество вводимых символов равно 15',
+            inputData: 'Нет данных или неверных формат ввода'
         }
 
         console.log(errors[error])
     }
 
-    return `Tasl 1: ${conversationNum(input)}`;
-};
+    module.exports = {conversionNum, prepareResult};
+})();
+    

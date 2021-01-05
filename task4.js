@@ -1,11 +1,10 @@
 // Скрипт умеет отлавливать ошибки на несоответствие требованиям, например, присутствие отрицательного числа в массиве или нет одного числа массива 1 в массиве 2.
 // Обработка ошибок выглядит хоть и не лучшим решением, но работает.
 
-module.exports = (input) => {
+(function() {
     // General function.
-    function combine() {
+    combine = (arr2) => {
         let arr1 = [2, 3, 1, 3, 2, 4, 100, 6, 20, 7, 9, 2, 19];
-        let arr2 = [2, 1, 4, 3, 9, 100];
 
         if (checkingArrayLength(arr1, arr2) === false) return;
 
@@ -22,15 +21,15 @@ module.exports = (input) => {
 
             newArr.concat(partArray);
         }
-    
+
         diffArr = diffSort(diffArr);
         newArr = concatArrs(newArr, diffArr);
         
-        return [newArr];
+        return newArr;
     }
 
     // Grouping the same numbers.
-    function addToGroup(newArr, elemArr2, arr1) {
+    addToGroup = (newArr, elemArr2, arr1) => {
         let countNum = counElementSearch(elemArr2, arr1);
 
         if (countNum) {
@@ -43,7 +42,7 @@ module.exports = (input) => {
     }
 
     // Helper to the addToGroup(). Calculating the number of repetitions.
-    function counElementSearch(elemArr2, arr1) {
+    counElementSearch = (elemArr2, arr1) => {
         let count = 0;
 
         for (let elemArr1 of arr1) {
@@ -61,7 +60,7 @@ module.exports = (input) => {
     }
 
     // Sorting different numbers.
-    function diffSort(arr) {
+    diffSort = arr => {
         arr.sort(function sortNumber(elem1, elem2) {
             return elem1 - elem2;
         });
@@ -70,7 +69,7 @@ module.exports = (input) => {
     }
 
     // Arrays concating/
-    function concatArrs(newArr, diffArr) {
+    concatArrs = (newArr, diffArr) => {
         if (newArr.length > 1) {
             return newArr.concat(diffArr);
         } else {
@@ -81,7 +80,7 @@ module.exports = (input) => {
     }
 
     // Verification of compliance with conditions.
-    function checking(arr1, arr2, diffArr) {
+    checking = (arr1, arr2, diffArr) => {
         if (!checkingArrayLength(arr1, arr2) 
         || !numberRangeCheckArr2(arr1, arr2)  
         || !numberRangeCheckArr1(arr1, arr2)  
@@ -92,7 +91,7 @@ module.exports = (input) => {
     }
 
     // Number range check arr1.
-    function numberRangeCheckArr1(arr1) {
+    numberRangeCheckArr1 = arr1 => {
         for (let elemArr1 of arr1) {
             if (elemArr1 < 0) {
                 let error = errors(1);
@@ -109,7 +108,7 @@ module.exports = (input) => {
     }
 
     // Number range check arr2.
-    function numberRangeCheckArr2(arr2) {
+    numberRangeCheckArr2 = arr2 => {
         for (let elemArr2 of arr2) {
             if (elemArr2 < 0) {
                 let error = errors(2);
@@ -126,7 +125,7 @@ module.exports = (input) => {
     }
 
     // Checking the convergence of arrays.
-    function checkingDuplicateValues(arr2) {
+    checkingDuplicateValues = arr2 => {
         let count = 0;
         for (let elem of arr2) {
             count += arr2.filter((item) => item === elem).length;
@@ -142,7 +141,7 @@ module.exports = (input) => {
     }
 
     // Checking array differences.
-    function checkingDifferenceArray(diffArr) {
+    checkingDifferenceArray = diffArr => {
         if (diffArr.length === 0) {
             let error = errors();
             console.log(error.difference);
@@ -153,7 +152,7 @@ module.exports = (input) => {
     }
 
     // Checking for the presence of elements of one array in the second.
-    function checkingElements(arr1, arr2) {
+    checkingElements = (arr1, arr2) => {
         for (let num of arr2) {
             if (!arr1.includes(num)) {
                 let error = errors();
@@ -166,7 +165,7 @@ module.exports = (input) => {
     }
 
     // Checking the length of an array.
-    function checkingArrayLength(arr1, arr2) { // 
+    checkingArrayLength = (arr1, arr2) => { // 
         if (arr1.length < 1 || arr1.length > 1000) {
             let error = errors(1);
             console.log(error.length);
@@ -181,7 +180,7 @@ module.exports = (input) => {
     }
 
     // Errors resulting from compliance checks.
-    function errors(add = '') {
+    errors = (add = '') => {
         return {
             persistence: 'Task 4: arr2 не содержит некоторых чисел arr1!',
             difference: 'Task 4: нежду массивами нет разницы!',
@@ -193,5 +192,5 @@ module.exports = (input) => {
         };
     }
 
-    return `Task 4: ${combine()}`;
-};
+    module.exports = {combine};
+})();

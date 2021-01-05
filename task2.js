@@ -1,22 +1,22 @@
 // Двойное сравнивание, как в требовании "-2**31 <= x <= 2**31 - 1", непредсказуемое и не выполняется как нужно.
 // По крайней мере у меня условие не пропускало цифру в проверяемом диапазоне.
 
-module.exports = (input) => {
-  function polyindromeСheck(incomData) {
-    if (!incomData) return;
+(function() {
+  polyindromeСheck = incomData => {
+    if (!incomData || typeof incomData != "number") return;
 
     const data = incomData;
-    
+    let result = '';
+
     if (-(2**31) <= incomData && incomData <= 2**31 - 1) {
-      return (data === +(incomData.toString().split("").reverse().join("")));
-    } else return ("Неверное число ввода!");
+      result = data === +(incomData.toString().split("").reverse().join(""));
+    } else result = "Неверное число ввода!";
+
+    return result;
   }
 
-  return `Task 2: ${polyindromeСheck(input)}`;
-}
-  
-
-
+  module.exports = {polyindromeСheck};
+})();
 
 // Я немного расширил функционал, и теперь на полиндром проверяется как число так и строка.
 // module.exports = (input) => {
