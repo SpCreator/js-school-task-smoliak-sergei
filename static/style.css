@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    width: 500px;
+    margin: auto;
+}
+.btn {
+    background: blue;
+    background-color: rgb(62, 96, 248);
+    color: cornsilk;
+    margin: 10px;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5%;
+}
+.btn:hover{
+    background-color: rgb(157, 174, 248);
+}
