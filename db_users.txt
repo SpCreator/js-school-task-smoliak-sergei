@@ -1,0 +1,1 @@
+[{"login": "admin","password": "adminPassword"},{"login": "admin2","password": "adminPassword2"}]

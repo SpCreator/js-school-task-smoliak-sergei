@@ -1,6 +1,6 @@
 (function() {
     // Game settings
-    const timeLimitMax      = 60; // time at level
+    const timeLimitMax      = 1; // time at level
     const decreaseTime      = 5; // decreasing time for next level
     let timeLimit           = timeLimitMax - 0;
     let level               = 1; // start level
@@ -13,6 +13,7 @@
     let btnSaveResult       = document.querySelector('.save-result');
     let btnCleanUp          = document.querySelector('.clean-storage');
     let btnClose            = document.querySelector('.close');
+    let btnLogOut           = document.querySelector(".logout");
     // Elements
     let gameZone            = document.querySelector('.row');
     let timeNow             = document.querySelector('.time-left');
@@ -41,6 +42,21 @@
         btnNewGameResult.addEventListener('click', clickNewGame);
         btnClose.addEventListener('click', closePopup);
         gameZone.addEventListener('click', clickTarget);
+        btnLogOut.addEventListener("click", pressLogout);
+    })();
+
+    (function checkAuth() {
+        const cookies = document.cookie.split("=");
+
+        for (let i = 0; i < cookies.length; i++) {
+            if (cookies[i] === "name") {
+                document.querySelector(".user-name-log").innerText = cookies[i+1];
+            } else {
+                if (document.cookie.split("=")[0] != "name") {
+                    document.location.href = "http://localhost:9090/login";
+                }
+            }
+        }
     })();
 
     /**
@@ -382,6 +398,8 @@
         gameOver();
         gameLevel.innerHTML         = level;
         popupResultScore.innerHTML  = `${score}`;
+        const userName = document.querySelector(".user-name-log").innerText;
+        document.querySelector(".user-name").setAttribute("value", userName);
         popupResult.style.display   = 'flex';
         gamePause.style.display     = 'block';
         inputName.focus();
@@ -440,7 +458,7 @@
 
         resultData.action = "set";
 
-        fetch('http://localhost:3000/result', {
+        fetch('http://localhost:9090/result', {
             method: 'POST',
             body: JSON.stringify(resultData),
             headers: {
@@ -456,7 +474,7 @@
         let data = {'action': "get"};
         let result = '';
 
-        const response = await fetch('http://localhost:3000/result', {
+        const response = await fetch('http://localhost:9090/result', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -502,12 +520,25 @@
      */
     function prepareRenderResults(usersData) {
         zoneResult.innerHTML = '';
-        
-        for (let userObject of usersData) {
+        const cookies = document.cookie.split("=");
+        let score = [];
+
+        for (let i = 0; i < usersData.length; i++) {
+            if (cookies[1] === usersData[i].name) {
+                score[i] = usersData[i].score;
+            }
             let paragraph = document.createElement('p');
-            paragraph.innerText = `${userObject.name}: ${userObject.score} lvl: ${userObject.level}`;
+            paragraph.innerText = `${usersData[i].name}: ${usersData[i].score} lvl: ${usersData[i].level}`;
             zoneResult.appendChild(paragraph);
         }
+
+        console.log(cookies);
+
+        score.sort(function(a, b) {
+            return b - a;
+        });
+
+        document.querySelector(".score-top-total").innerHTML = score[0];
     }
 
     /**
@@ -515,7 +546,7 @@
      */
     async function cleanSorage() {
         let data = {'action': "del"};
-        await fetch('http://localhost:3000/result', {
+        await fetch('http://localhost:9090/result', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {
@@ -549,6 +580,16 @@
         const audio = new Audio;
         audio.src = "static/sound/game-over.mp3";
         audio.play();
+    }
+
+    function pressLogout() {
+        fetch('http://localhost:9090/logout', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({}),
+        });
     }
 
     //  /**
