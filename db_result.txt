@@ -1,1 +1,0 @@
-{"allUsers":[{"name":"admin2","score":8,"level":1},{"name":"admin2","score":11,"level":1},{"name":"admin2","score":13,"level":1},{"name":"admin","score":0,"level":1},{"name":"admin","score":7,"level":1},{"name":"admin","score":5,"level":1}]}

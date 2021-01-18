@@ -1,6 +1,6 @@
 (function() {
     // Game settings
-    const timeLimitMax      = 1; // time at level
+    const timeLimitMax      = 5; // time at level
     const decreaseTime      = 5; // decreasing time for next level
     let timeLimit           = timeLimitMax - 0;
     let level               = 1; // start level
@@ -13,7 +13,6 @@
     let btnSaveResult       = document.querySelector('.save-result');
     let btnCleanUp          = document.querySelector('.clean-storage');
     let btnClose            = document.querySelector('.close');
-    let btnLogOut           = document.querySelector(".logout");
     // Elements
     let gameZone            = document.querySelector('.row');
     let timeNow             = document.querySelector('.time-left');
@@ -42,21 +41,6 @@
         btnNewGameResult.addEventListener('click', clickNewGame);
         btnClose.addEventListener('click', closePopup);
         gameZone.addEventListener('click', clickTarget);
-        btnLogOut.addEventListener("click", pressLogout);
-    })();
-
-    (function checkAuth() {
-        const cookies = document.cookie.split("=");
-
-        for (let i = 0; i < cookies.length; i++) {
-            if (cookies[i] === "name") {
-                document.querySelector(".user-name-log").innerText = cookies[i+1];
-            } else {
-                if (document.cookie.split("=")[0] != "name") {
-                    document.location.href = "http://localhost:9090/login";
-                }
-            }
-        }
     })();
 
     /**
@@ -433,10 +417,13 @@
      * @param {*} level 
      */
     function prepareUserData(userName, score, level) {
+        let cookies = document.cookie.split("%20");
+        let id = cookies[0].split("=");
         let userData = { 
                 name: userName,
                 score: score,
-                level: level
+                level: level,
+                id: id[1]
             };
 
         return userData;
@@ -448,15 +435,10 @@
      * @param {*} userData 
      */
     async function setDb(userData) {
-        let resultData = await getDb();
-
-        if (!resultData) { 
-            resultData = {allUsers: [userData]};
-        } else {
-            resultData.allUsers.push(userData);
+        const resultData = {
+            action: "set",
+            data: userData
         }
-
-        resultData.action = "set";
 
         fetch('http://localhost:9090/result', {
             method: 'POST',
@@ -481,7 +463,7 @@
                 'Content-Type': 'application/json',
             }
         });
-
+        
         let userData = await response.json();
 
         if (userData) {
@@ -509,7 +491,7 @@
         }
 
         prepareusersData 
-        ? prepareRenderResults(prepareusersData.allUsers.slice(0, 10)) 
+        ? prepareRenderResults(prepareusersData) 
         : zoneResult.innerHTML = '' 
     }
 
@@ -520,25 +502,31 @@
      */
     function prepareRenderResults(usersData) {
         zoneResult.innerHTML = '';
-        const cookies = document.cookie.split("=");
-        let score = [];
+        const cookies = document.cookie.split("%20");
 
         for (let i = 0; i < usersData.length; i++) {
-            if (cookies[1] === usersData[i].name) {
-                score[i] = usersData[i].score;
-            }
             let paragraph = document.createElement('p');
             paragraph.innerText = `${usersData[i].name}: ${usersData[i].score} lvl: ${usersData[i].level}`;
             zoneResult.appendChild(paragraph);
         }
 
-        console.log(cookies);
+        getScore(cookies[2]);
+        document.querySelector(".user-name-log").innerText = cookies[1];
+        
+    }
 
-        score.sort(function(a, b) {
-            return b - a;
+    async function getScore(login) {
+        const response = await fetch('http://localhost:9090/score', {
+            method: 'POST',
+            body: JSON.stringify({login: login}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
         });
+        
+        let userData = await response.json();
 
-        document.querySelector(".score-top-total").innerHTML = score[0];
+        document.querySelector(".score-top-total").innerHTML = userData.score;
     }
 
     /**
@@ -580,16 +568,6 @@
         const audio = new Audio;
         audio.src = "static/sound/game-over.mp3";
         audio.play();
-    }
-
-    function pressLogout() {
-        fetch('http://localhost:9090/logout', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({}),
-        });
     }
 
     //  /**

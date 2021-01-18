@@ -233,29 +233,37 @@ h1 {
     max-width: 800px;
 }
 /* modal */
-.login {
-    width: 300px;
+.login,
+.register {
+    width: 350px;
     border: 1px solid #000;
     padding: 15px;
     box-shadow: #00000052 2px 1px 3px 1px;
     margin: auto;
     margin-top: 10%;
 }
-.login form {
+.login form,
+.register form {
     display: flex;
     flex-direction: column;
     padding: 32px;
 }
 .checking-login,
-.checking-password {
+.checking-login-not,
+.checking-login-rule,
+.checking-name,
+.checking-password,
+.checking-password-confirm,
+.checking-password-match {
     display: none;
+    color: #f10101;
 }
 .welcome {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
 }
-.registration {
+.reg {
     margin-top: 10px;
 }
 .header-top h1{
@@ -268,6 +276,11 @@ h1 {
     position: relative;
     float: right;
     margin-right: 20px;
+}
+.user-name-log,
+.score-top-total {
+    color: #f10101;
+    font-weight: bold;
 }
 /* @media */
 @media (min-width: 1500px) {
