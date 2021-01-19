@@ -1,6 +1,6 @@
 (function() {
     // Game settings
-    const timeLimitMax      = 5; // time at level
+    const timeLimitMax      = 60; // time at level
     const decreaseTime      = 5; // decreasing time for next level
     let timeLimit           = timeLimitMax - 0;
     let level               = 1; // start level

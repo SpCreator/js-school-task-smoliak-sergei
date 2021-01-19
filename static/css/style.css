@@ -241,6 +241,13 @@ h1 {
     box-shadow: #00000052 2px 1px 3px 1px;
     margin: auto;
     margin-top: 10%;
+    position: absolute;
+    left: 42.5%;
+    background: aliceblue;
+    border-radius: 5px;
+}
+.register {
+    margin-top: 6%;
 }
 .login form,
 .register form {
@@ -263,8 +270,9 @@ h1 {
     font-size: 18px;
     font-weight: bold;
 }
-.reg {
-    margin-top: 10px;
+.reg,
+.back {
+    margin: 5px 0;
 }
 .header-top h1{
     width: 100px;
@@ -281,6 +289,15 @@ h1 {
 .score-top-total {
     color: #f10101;
     font-weight: bold;
+}
+.gif {
+    position: absolute;
+    z-index: -1;
+}
+.wrap-login,
+.wrap-reg {
+    width: 600px;
+    margin: auto;
 }
 /* @media */
 @media (min-width: 1500px) {
