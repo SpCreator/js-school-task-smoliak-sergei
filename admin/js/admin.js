@@ -7,7 +7,6 @@
         db = await connection();
 
         getAllUsers = async (props = null) => {
-            console.log('props', props);
             const getAllUsersDb = await db.collection("users");
             let result;
             let score;
@@ -15,11 +14,8 @@
 
             if (props) {
                 if (props.action === "sort") {
-                    console.log('sort');
                     const column = props.prop;
-                    console.log('column', column);
                     result = await getAllUsersDb.find().sort({[column]: -1}).toArray();
-                    console.table('result', result);
                 }
             } else {
                 result = await getAllUsersDb.find().toArray(); // возможно стоит отключить первичную сортировку по имени для правильной работы пагинации?

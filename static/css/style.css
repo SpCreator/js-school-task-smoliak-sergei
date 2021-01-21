@@ -330,15 +330,6 @@ h1 {
 .th-count-score {
     cursor: pointer;
 }
-.th-id,
-.th-login,
-.th-name,
-.th-role,
-.th-ip,
-.th-reg-data,
-.th-count-score::before {
-    /* content: '><'; */
-}
 .wrap-admin {
     margin: auto;
     display: flex;

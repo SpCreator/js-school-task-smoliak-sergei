@@ -57,7 +57,7 @@ html(lang="en")
 
             columnsSort = async (e) => {
                 let elemClass = e.target.className;
-                console.log(elemClass);
+
                 e.target.classList.toggle(elemClass);
                 const prop = e.target.getAttribute("data-colunm-name");
                 document.location.href = `http://localhost:9090/admin?sort=${prop}`;

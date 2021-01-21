@@ -64,7 +64,6 @@
                 let allUsers;
 
                 if (req.query.sort) {
-                    console.log('req.query.sort', req.query.sort);
                     allUsers = await admin.getAllUsers({action: 'sort', prop: req.query.sort});
                 } else if (req.query.pagin) {
 
