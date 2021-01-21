@@ -8,17 +8,25 @@
 
         getAllUsers = async (props = null) => {
             const getAllUsersDb = await db.collection("users");
+            let preCount = await getAllUsersDb.find().count();
             let result;
             let score;
+            
             let count;
-
+            
             if (props) {
-                if (props.action === "sort") {
+                if (props.action === "sort") { // TODO: добавить учет пагинации
                     const column = props.prop;
-                    result = await getAllUsersDb.find().sort({[column]: -1}).toArray();
+                    result = await getAllUsersDb.find().sort({[column]: -1}).limit(10).toArray(); 
+                } else if (props.action === "pagin") { // TODO: добавить учет сортировки
+                    let page = props.prop;
+                    if (page == 1) page = 0;
+                    else page = page * 10 - 10; 
+                    result = await getAllUsersDb.find().limit(10).skip(page).toArray(); // .sort({[column]: -1})
+                    result.page = props.prop;
                 }
             } else {
-                result = await getAllUsersDb.find().toArray(); // возможно стоит отключить первичную сортировку по имени для правильной работы пагинации?
+                result = await getAllUsersDb.find().limit(10).toArray();
             }
 
             for (let obj of result) {
@@ -27,6 +35,9 @@
                 obj.score = score;
                 obj.count = count;
             }
+
+            let countCollections = preCount / 10;
+            result.countColl = countCollections < 1 ? Math.floor(countCollections) : Math.ceil(countCollections);
 
             return result;
         }

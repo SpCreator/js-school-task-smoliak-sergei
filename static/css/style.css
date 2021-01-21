@@ -337,6 +337,9 @@ h1 {
     justify-content: space-around;
     flex-direction: row-reverse;
 }
+.page-link {
+    cursor: pointer;
+}
 /* @media */
 @media (min-width: 1500px) {
     .info {

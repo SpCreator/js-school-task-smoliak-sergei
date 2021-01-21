@@ -60,17 +60,16 @@
         app.get("/admin", async (req, res) => {
             const checkRole = await helper.checkingRoleAdminFront(req.cookies);
 
-            if (checkRole) {
+            if (checkRole) { // TODO: вынести в отдельную функцию
                 let allUsers;
 
                 if (req.query.sort) {
                     allUsers = await admin.getAllUsers({action: 'sort', prop: req.query.sort});
                 } else if (req.query.pagin) {
-
+                    allUsers = await admin.getAllUsers({action: 'pagin', prop: req.query.pagin});
                 } else if (req.query.search) {
 
                 } else allUsers = await admin.getAllUsers();
-
                 res.render(__dirname + "/admin/views/admin", {users: allUsers});
             } else if (!checkRole) {
                 res.redirect("/");
@@ -86,7 +85,7 @@
             const action = req.body.action;
             const resultsDb = await db.collection("results");
 
-            if (action === "get") {
+            if (action === "get") { // TODO: вынести в отдельную функцию
                 const results = await helper.getLimitResults(resultsDb, 10);
                 res.send(JSON.stringify(results));
             } else if (action === "set") {
@@ -104,7 +103,7 @@
             const ip = req.connection.remoteAddress;
             const resCheck = await helper.chekingForms(body, ip);
 
-            if (resCheck.page == "register" ) {
+            if (resCheck.page == "register" ) { // TODO: вынести в отдельную функцию
                 res.send(JSON.stringify({res: resCheck, page: body.page}));
             }
 
