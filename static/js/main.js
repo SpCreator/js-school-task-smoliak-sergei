@@ -1,6 +1,6 @@
 (function() {
     // Game settings
-    const timeLimitMax      = 60; // time at level
+    const timeLimitMax      = 2; // time at level
     const decreaseTime      = 5; // decreasing time for next level
     let timeLimit           = timeLimitMax - 0;
     let level               = 1; // start level
@@ -502,7 +502,7 @@
      */
     function prepareRenderResults(usersData) {
         zoneResult.innerHTML = '';
-        const cookies = document.cookie.split("%20");
+        const cookies = getCookies();
 
         for (let i = 0; i < usersData.length; i++) {
             let paragraph = document.createElement('p');
@@ -510,8 +510,9 @@
             zoneResult.appendChild(paragraph);
         }
 
-        getScore(cookies[2]);
-        document.querySelector(".user-name-log").innerText = cookies[1];
+        getScore(cookies[3]);
+        adminPage(cookies);
+        document.querySelector(".user-name-log").innerText = cookies[2];
         
     }
 
@@ -525,15 +526,59 @@
         });
         
         let userData = await response.json();
-
         document.querySelector(".score-top-total").innerHTML = userData.score;
+    }
+
+    function getCookies() {
+        const cookies = document.cookie;
+
+        if (!cookies) return false;
+
+        let preCookies;
+
+        if (cookies.length > 1) preCookies = cookies.split("; ");
+        else preCookies = cookies;
+
+        for (let i = 0; i < preCookies.length; i++) {
+            let separ = preCookies[i].split("%20");
+            let cookieNameandId = separ[0].split("=").concat(separ.slice(1));
+
+            if (cookieNameandId[0] === "auth") return cookieNameandId;
+            else continue;
+        }
+    }
+
+    async function adminPage() {
+        const cookie = getCookies();
+        
+        if (cookie[4] === "admin") {
+            const response = await fetch('http://localhost:9090/admin', {
+                method: 'POST',
+                body: JSON.stringify(cookie),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+        
+            let userData = await response.json();
+
+            if (userData.res) {
+                const panel = document.querySelector(".panel a");
+                panel.classList.remove("hide-panel");
+            }
+        }
     }
 
     /**
      * Cleaning up Local Storage
      */
     async function cleanSorage() {
-        let data = {'action': "del"};
+        const cookie = getCookies();
+        
+        let data = {
+            action: "del",
+            cookie: cookie
+        };
         await fetch('http://localhost:9090/result', {
             method: 'POST',
             body: JSON.stringify(data),

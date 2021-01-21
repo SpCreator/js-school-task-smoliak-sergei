@@ -1,4 +1,4 @@
-
+(function() {
     const connection = require("./db");
     const md5 = require('md5');
     let db;
@@ -14,13 +14,17 @@
             const getScore = await resultsDb.find();
             const results = await getScore.toArray();
 
-            if (results.length > 0) { /////////////////////// ??????????????????????
+            if (results.length > 0) {
                 for (let i = 0; i < results.length; i++) {
                     if (results[i].id == queryDb._id) {
                         scoreAll[i] = results[i].score;
-                    }
+                    } continue;
                 }
-        
+                
+                if (scoreAll.length == 0) {
+                    return 0;
+                }
+
                 scoreAll.sort(function (a, b) {
                     return b - a;
                 });
@@ -34,7 +38,7 @@
         getUserName = async login => {
             const queryDb = await db.collection("users").findOne({login: login});
 
-            return {name: queryDb.name, login: login, id: queryDb._id};
+            return {name: queryDb.name, login: login, id: queryDb._id, role: queryDb.role};
         }
 
         chekingForms = async (dataForm, ip) => {
@@ -136,8 +140,13 @@
             for (let simbol of name) {
                 const codeSimbol = simbol.charCodeAt();
 
-                if ((codeSimbol >= 65 && codeSimbol <= 90) || (codeSimbol >= 97 && codeSimbol <= 122) || (codeSimbol >= 1040 && codeSimbol <= 1103) 
-                || codeSimbol === 1025 || codeSimbol === 1105 || codeSimbol === 20) {
+                if ((codeSimbol >= 48 && codeSimbol <= 57) 
+                || (codeSimbol >= 65 && codeSimbol <= 90) 
+                || (codeSimbol >= 97 && codeSimbol <= 122) 
+                || (codeSimbol >= 1040 && codeSimbol <= 1103) 
+                || codeSimbol === 1025 
+                || codeSimbol === 1105 
+                || codeSimbol === 32) {
                     continue;
                 } else return false;
             }
@@ -152,6 +161,7 @@
                 login: dataForm.res.data.login,
                 name: dataForm.res.data.name,
                 password: md5(dataForm.res.data.password),
+                role: "user",
                 data: new Date(data),
                 ip: dataForm.res.ip
             });
@@ -161,13 +171,53 @@
             return `${usersDb._id} ${usersDb.name} ${usersDb.login}`;
         }
 
+        checkingRoleAdminFront = async cookieData => {
+            const parseCookie = parseAllCookie(cookieData);
+
+            if (!parseCookie) return false;
+
+            if (parseCookie[3] === "admin") {
+                const usersDb = await db.collection("users").findOne({login: parseCookie[2]});
+                if (usersDb && usersDb.role === parseCookie[3] && parseCookie[0] == usersDb._id) return true;
+                else return false;
+            } else return false;
+        }
+
+        checkingRoleAdminBack = async cookieData => {
+            const usersDb = await db.collection("users").findOne({login: cookieData[3]});
+            if (usersDb && usersDb.role === cookieData[4] && cookieData[1] == usersDb._id) return true;
+            else return false;
+        }
+
+        parseAllCookie = cookies => {
+            const arr = cookies.auth.split(" ");
+            return arr;
+        }
+
+        dropUserReslt = async (cookies, results) => {
+            const parseCookie = parseAllCookie(cookies);
+            const resultsDb = await db.collection("results");
+
+            await resultsDb.deleteMany({id: parseCookie[0]});
+            return true;
+        }
+
+        getLimitResults = async (resultsDb, limit = 0) => {
+            const searchCursor = await resultsDb.find().sort({lvl: -1, score: -1}).limit(limit);
+            return await searchCursor.toArray();
+        }
+
         module.exports.getScore = getScore;
         module.exports.getUserName = getUserName;
         module.exports.chekingForms = chekingForms;
         module.exports.createUser = createUser;
+        module.exports.checkingRoleAdminFront = checkingRoleAdminFront;
+        module.exports.checkingRoleAdminBack = checkingRoleAdminBack;
+        module.exports.dropUserReslt = dropUserReslt;
+        module.exports.getLimitResults = getLimitResults;
     }
 
-
     init();
+})();
 
     

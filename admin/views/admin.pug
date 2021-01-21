@@ -1,0 +1,69 @@
+doctype html
+html(lang="en")
+    head
+        title Admin panel
+        link(rel="stylesheet" href="/static/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/static/css/style.css")
+        script(src="/static/js/jquery-3.5.1.min.js")
+        script(src="/static/js/bootstrap.min.js")
+        //- script(src="/admin/js/admin.js" defer)
+    body
+        div.wrap-admin
+            div.link
+                div.logout
+                    a(a href="/logout" class="logout") Logout
+                div.back
+                    a(href="/" class="logout") Back to the game
+            div.users
+                table.table-user.table.table-striped
+                    thead
+                        tr
+                            th
+                                a(class="th-id" data-colunm-name="_id") ID
+                            th
+                                a(class="th-login" data-colunm-name="login") LOGIN
+                            th
+                                a(class="th-name" data-colunm-name="name") NAME
+                            th
+                                a(class="th-role" data-colunm-name="role") ROLE
+                            th 
+                                a(class="th-ip" data-colunm-name="ip") REG IP
+                            th 
+                                a(class="th-data" data-colunm-name="data") REG DATE
+                            th
+                                a(class="th-count-score" data-colunm-name="score") GAME STATUS
+                    tbody
+                        each obj, i in users
+                                tr
+                                    td.td-id #{obj._id}
+                                    td.td-login #{obj.login}
+                                    td.td-name #{obj.name}
+                                    td.td-role #{obj.role}
+                                    td.td-ip #{obj.ip}
+                                    td.td-data #{obj.data}
+                                    td.td-count-score Total game count #{obj.count}, score #{obj.score}
+                nav.table-navigation
+                    ul.pagination.pagination-sm
+                        - let i = 1;
+                        while i < 4
+                            if i == 1
+                                li.page-item.active
+                                        a(class="page-link" data-page="#{i}") #{i++}
+                            else
+                                li.page-item
+                                        a(class="page-link" data-page="#{i}") #{i++}
+        script.
+            const allLink = document.querySelectorAll("tr th a");
+
+            columnsSort = async (e) => {
+                let elemClass = e.target.className;
+                console.log(elemClass);
+                e.target.classList.toggle(elemClass);
+                const prop = e.target.getAttribute("data-colunm-name");
+                document.location.href = `http://localhost:9090/admin?sort=${prop}`;
+            }
+
+            for (let elem of allLink) elem.addEventListener("click", columnsSort);
+
+
+            

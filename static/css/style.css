@@ -1,5 +1,6 @@
 /* General page */
 .wrap {
+    clear: both;
     display: flex;
     justify-content: center;
 }
@@ -280,7 +281,8 @@ h1 {
     top: 15px;
     position: relative;
 }
-.user {
+.user,
+.link {
     position: relative;
     float: right;
     margin-right: 20px;
@@ -298,6 +300,51 @@ h1 {
 .wrap-reg {
     width: 600px;
     margin: auto;
+}
+.hide-panel {
+    display: none;
+}
+/* table */
+.table-user {
+    width: 300px;
+}
+.table-user {
+    margin: 15px;
+    border: 1px solid black;
+}
+.table-user td, th {
+    border: 1px solid black;
+    min-width: 180px;
+    max-width: 250px;
+
+}
+.td-data {
+    white-space: pre-line;
+}
+.th-id,
+.th-login,
+.th-name,
+.th-role,
+.th-ip,
+.th-reg-data,
+.th-count-score {
+    cursor: pointer;
+}
+.th-id,
+.th-login,
+.th-name,
+.th-role,
+.th-ip,
+.th-reg-data,
+.th-count-score::before {
+    /* content: '><'; */
+}
+.wrap-admin {
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    flex-direction: row-reverse;
 }
 /* @media */
 @media (min-width: 1500px) {
