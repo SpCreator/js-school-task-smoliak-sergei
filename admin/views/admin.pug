@@ -15,11 +15,13 @@ html(lang="en")
                 div.back
                     a(href="/" class="logout") Back to the game
             div.users
+                span.sort.hide-panel #{users[0].sort}
+                span.state.hide-panel #{users[0].state}
                 table.table-user.table.table-striped
                     thead
                         tr
                             th
-                                a(class="th-id" data-colunm-name="_id") ID
+                                a(class="th-id" data-colunm-name="id") ID
                             th
                                 a(class="th-login" data-colunm-name="login") LOGIN
                             th
@@ -34,19 +36,22 @@ html(lang="en")
                                 a(class="th-count-score" data-colunm-name="score") GAME STATUS
                     tbody
                         each obj, i in users
-                                tr
-                                    td.td-id #{obj._id}
-                                    td.td-login #{obj.login}
-                                    td.td-name #{obj.name}
-                                    td.td-role #{obj.role}
-                                    td.td-ip #{obj.ip}
-                                    td.td-data #{obj.data}
-                                    td.td-count-score Total game count #{obj.count}, score #{obj.score}
+                            tr
+                                td.td-id #{obj._id}
+                                td.td-login #{obj.login}
+                                td.td-name #{obj.name}
+                                td.td-role #{obj.role}
+                                td.td-ip #{obj.ip}
+                                td.td-data #{obj.data}
+                                td.td-count-score Total game count #{obj.count}, score #{obj.score}
                 nav.table-navigation
                     ul.pagination.pagination-sm
                         - let i = 1;
                         while i <= users.countColl
-                            if i == users.page
+                            if users.page && i == users.page
+                                li.page-item.active
+                                        a(class="page-link" data-page="#{i}") #{i++}
+                            else if !users.page && i == 1
                                 li.page-item.active
                                         a(class="page-link" data-page="#{i}") #{i++}
                             else
@@ -55,22 +60,52 @@ html(lang="en")
         script.
             const allLink = document.querySelectorAll("tr th a");
             const pageLink = document.querySelectorAll(".page-link");
+            
+            (() => {
+                const allHead = document.querySelectorAll("tr th a");
+                const sort = document.querySelector(".sort").innerText;
+                const state = document.querySelector(".state").innerText;
+                const tag = document.querySelector(`.th-${sort}`);
 
-            columnsSort = async (e) => {
-                let elemClass = e.target.className;
+                for (let tagObj of allHead) {
+                    if (tagObj.classList.length > 1) tagObj.classList.remove(tagObj.classList[1]);
+                }
 
-                e.target.classList.toggle(elemClass); // :before content
-                const prop = e.target.getAttribute("data-colunm-name");
-                document.location.href = `http://localhost:9090/admin?sort=${prop}`;
+                if (tag && +state == 1) tag.classList.add("sort-up");
+                else if (tag && +state == -1) tag.classList.add("sort-down");
+
+
+            })();
+            
+            columnsSort = (e) => {
+                let sortState = e.target.classList[1];
+
+                if (sortState && sortState === "sort-up") sortState = "sort-down";
+                else if (sortState && sortState === "sort-down") sortState = "sort-up";
+                else sortState = "sort-up";
+
+                const pagin = document.querySelector(".page-item.active").innerText;
+                const sort = e.target.getAttribute("data-colunm-name");
+                
+                document.location.href = `http://localhost:9090/admin?action=sort&sort=${sort}&state=${sortState}&page=${pagin}`;
+
             }
 
-            pagination = async (e) => {
-                let prop = e.target.innerText;
-                document.location.href = `http://localhost:9090/admin?pagin=${prop}`;
+            pagination = (e) => {
+                const pagin = e.target.innerText;
+                const sort = document.querySelector(".sort").innerText;
+                const allHead = document.querySelectorAll("tr th a");
+                let sortState;
+
+                for (let tagObj of allHead) {
+                    if (tagObj.classList.length > 1) {
+                        sortState = tagObj.classList[1];
+                    }
+                }
+                !sort && !sortState 
+                ? document.location.href = `http://localhost:9090/admin?action=pagin&page=${pagin}`
+                : document.location.href = `http://localhost:9090/admin?action=pagin&sort=${sort}&state=${sortState}&page=${pagin}`;
             }
 
             for (let elem of allLink) elem.addEventListener("click", columnsSort);
             for (let elem of pageLink) elem.addEventListener("click", pagination);
-
-
-            

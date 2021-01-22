@@ -63,13 +63,10 @@
             if (checkRole) { // TODO: вынести в отдельную функцию
                 let allUsers;
 
-                if (req.query.sort) {
-                    allUsers = await admin.getAllUsers({action: 'sort', prop: req.query.sort});
-                } else if (req.query.pagin) {
-                    allUsers = await admin.getAllUsers({action: 'pagin', prop: req.query.pagin});
-                } else if (req.query.search) {
-
+                if (req.query.action) {
+                    allUsers = await admin.getAllUsers(req.query);
                 } else allUsers = await admin.getAllUsers();
+
                 res.render(__dirname + "/admin/views/admin", {users: allUsers});
             } else if (!checkRole) {
                 res.redirect("/");
